@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
-# Create your views here.
 
 def index(response):
-    return render(response, 'main/base.html', {"name": 1})
+    return render(response, "main/base.html", {})
 
+# redirects to the login page if not logged in
+@login_required(login_url='/login/')
 def home(response):
-    return render(response, "main/home.html", {"name": 1})
+    return render(response, "main/home.html", {})
