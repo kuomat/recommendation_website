@@ -12,9 +12,17 @@
         {% csrf_token %}
         {{ form|crispy }}
 
-        <p>Don't have an account? Create one <a href="/register">here</a></p>
+        <button style="margin-bottom: 1em" type="submit" class="btn btn-primary">Login</button>
+
+        <p><a href="/change_password">Forgot password?</a></p>
+        <hr>
+
+        <!-- Sign up button -->
+        <a href="/register">
+            <button type="button" style="margin-bottom: 1em" class="btn btn-success">Create new account</button>
+        </a>
+
         <p></p>
-        <button style="margin-bottom: 1em" type="submit" class="btn btn-success">Login</button>
     </form>
 </div>
 {% endblock %}
