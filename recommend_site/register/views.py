@@ -16,17 +16,3 @@ def register(response):
         form = RegisterForm()
 
     return render(response, "register/register.html", {"form": form})
-
-def login(response):
-    if response.user.is_authenticated:
-        return redirect("/home")
-    else:
-        if response.method == 'POST':
-            form = AuthenticationForm(response.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('/home')
-        else:
-            form = AuthenticationForm()
-
-    return render(response, "registration/login.html", {"form": form})

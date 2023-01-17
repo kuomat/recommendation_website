@@ -21,7 +21,6 @@ from register import views as v
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', v.register, name='register'),
-    path('login/', v.login, name='login'),
 
     # path('password-reset/',
     #      auth_views.PasswordResetView.as_view(template_name='register/password_reset.html'),
