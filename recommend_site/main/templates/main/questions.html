@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+    {% for ele in movies %}
+        <div class="movies_form">
+            <h4>{{ele}}</h4>
+            <select class="rate_movies" name="rate_movies" id="rate_movies">
+                <option value="rate" selected>Rate</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+    {% endfor %}
+    <br>
+
+    <div class="center_button">
+        <input type="submit" class="btn btn-primary" value="Submit_ratings">
+    </div>
+{% endblock %}
