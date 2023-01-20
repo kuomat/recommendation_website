@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from . import movies
 import random
 import pandas as pd
 
@@ -17,13 +18,24 @@ def home(response):
     return render(response, "main/home.html", {})
 
 
+# randomly chooses movies and put them into a questionaire
 @login_required(login_url='/login/')
 def questions(response, ratings):
-    # randomly get the movies and put them in a list
+    # stores the movies into movie_qs
     movies_df = pd.read_csv("main/movies.csv")
-    movies = []
+    movie_qs = []
     for _ in range(ratings):
         index = random.randint(0, movies_df.shape[0] - 1)
-        movies.append(movies_df.loc[index, 'title'])
+        movie_qs.append(movies.fix_movie(movies_df.loc[index, 'title']))
 
-    return render(response, "main/questions.html", {"movies": movies})
+    if response.method == 'POST':
+        movie_scores = response.POST.get('rate_movies')
+        return render(response, "main/test.html", {"scores": movie_scores})
+
+    return render(response, "main/questions.html", {"movies": movie_qs})
+
+@login_required(login_url='/login/')
+def recommendations(response):
+    # gets the movies with the highest recommendations
+    best_movies = movies.get_favorites()
+    return render(response, "main/recommendations.html", {"best_movies": best_movies})

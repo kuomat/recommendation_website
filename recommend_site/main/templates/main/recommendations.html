@@ -1,0 +1,8 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+    {% for movie in best_movies %}
+        <h4>{{movie}}</h4>
+    {% endfor %}
+    <br>
+{% endblock %}
