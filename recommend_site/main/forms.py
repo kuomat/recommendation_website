@@ -1,8 +1,9 @@
 from django import forms
 
-class RegisterForm(UserCreationForm):
-    email = forms.EmailField()
+class RatingQuestionsForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        questions = kwargs.pop('questions')
 
-    class Meta:
-        model = User
-        fields = ['username', 'email']
+        super().__init__(*args, **kwargs)
+        for i, question in enumerate(questions):
+            self.fields[f'question_{i+1}'] = forms.ChoiceField(choices=question['options'], label=question['text'])
