@@ -1,19 +1,12 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<form autocomplete="OFF" method="POST" id="ratings">
+<form method="post">
     {% csrf_token %}
-    {% for ele in movies %}
+    {% for field in form %}
         <div class="movies_form">
-            <h4>{{ele}}</h4>
-            <select class="rate_movies" id="rate_movies", name="rate_movies">
-                <option value="not_watched" selected>Not Watched</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
+            <h4>{{ field.label_tag }}</h4>
+            {{ field }}
         </div>
     {% endfor %}
     <br>
@@ -25,14 +18,7 @@
     </div>
 
     <div class="center_button">
-        <!-- <a href="/recommendations"> -->
-            <input type="submit" class="btn btn-primary" value="Submit Ratings">
-        <!-- </a> -->
+        <input type="submit" class="btn btn-primary" value="Submit Ratings">
     </div>
 </form>
-
-<script>
-    console.log("hello");
-</script>
-
 {% endblock %}
