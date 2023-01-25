@@ -3,8 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .forms import RatingQuestionsForm
 from . import movies
-import random
-import pandas as pd
 
 # redirects to the login page if not logged in
 @login_required(login_url='/login/')
@@ -23,11 +21,8 @@ def home(response):
 # randomly chooses movies and put them into a questionaire
 @login_required(login_url='/login/')
 def questions(response, ratings):
-    movies_df = pd.read_csv("main/movies.csv")
-    movie_qs, questions, answers = [], [], []
-    for _ in range(ratings):
-        index = random.randint(0, movies_df.shape[0] - 1)
-        movie_qs.append(movies.fix_movie(movies_df.loc[index, 'title']))
+    movie_qs, indices = movies.generate_questions(ratings)
+    questions, answers = [], []
 
     for movie in movie_qs:
         questions.append({'text': movie, 'options': [('not_watched', 'Not Watched'),
@@ -45,7 +40,8 @@ def questions(response, ratings):
 
             # converts array into a string to be passed into url
             answers = ','.join(map(str, answers))
-            url = reverse("recommendations", kwargs={"answers": answers})
+            indices = ','.join(map(str, indices))
+            url = reverse("recommendations", kwargs={"answers": answers, "indices": indices})
             return redirect(url)
 
     else:
@@ -54,10 +50,17 @@ def questions(response, ratings):
     return render(response, "main/questions.html", {"form": form})
 
 @login_required(login_url='/login/')
-def recommendations(response, answers):
-    # puts the array back
+def recommendations(response, answers, indices):
+    # puts the arrays back
     answers = answers.split(",")
-    
+    print(answers)
+    print(type(answers[0]))
+    indices = indices.split(",")
+
     # gets the movies with the highest recommendations
     best_movies = movies.get_favorites()
-    return render(response, "main/recommendations.html", {"best_movies": best_movies, "answers": answers})
+
+    # gets the personalized movies list
+    personalized_movies = movies.get_personalized(answers, indices)
+    print(personalized_movies)
+    return render(response, "main/recommendations.html", {"best_movies": best_movies, "personalized": personalized_movies})
