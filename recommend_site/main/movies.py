@@ -4,12 +4,12 @@ import random
 from numpy.linalg import norm
 
 
-TOP_FAVS = 10
-TOP_USERS = 10
+TOP_FAVS = 15
+TOP_USERS = 15
 
 
-movies_df = pd.read_csv("main/movies.csv")
-ratings_df = pd.read_csv("main/ratings.csv")
+movies_df = pd.read_csv("movies.csv")
+ratings_df = pd.read_csv("ratings.csv")
 
 # fixes the movie names
 def fix_movie(movie):
@@ -68,7 +68,7 @@ def get_favorites():
     ratings = ratings[ratings['count'] > 100]
 
     ratings_np = ratings['avg_rating'].to_numpy()
-    indices = np.argpartition(ratings_np, -10)[-10:]
+    indices = np.argpartition(ratings_np, -TOP_FAVS)[-TOP_FAVS:]
     indices = indices[np.argsort(ratings_np[indices])] # mean ratings in ascending order
     top_movies_id = [ratings.iloc[index]['movieId'] for index in indices]
 

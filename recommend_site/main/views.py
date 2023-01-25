@@ -53,8 +53,6 @@ def questions(response, ratings):
 def recommendations(response, answers, indices):
     # puts the arrays back
     answers = answers.split(",")
-    print(answers)
-    print(type(answers[0]))
     indices = indices.split(",")
 
     # gets the movies with the highest recommendations
@@ -62,5 +60,4 @@ def recommendations(response, answers, indices):
 
     # gets the personalized movies list
     personalized_movies = movies.get_personalized(answers, indices)
-    print(personalized_movies)
-    return render(response, "main/recommendations.html", {"best_movies": best_movies, "personalized": personalized_movies})
+    return render(response, "main/recommendations.html", {"best": best_movies, "personalized": personalized_movies})

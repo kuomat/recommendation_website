@@ -1,8 +1,60 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-    {% for movie in personalized %}
-        <h4>{{movie}}</h4>
-    {% endfor %}
-    <br>
+    <div class="parent">
+        <div class="column-1">
+            <h1>Based on Your Ratings:</h1>
+            <hr>
+            <ol type="1">
+                {% for movie in personalized %}
+                    <h3><li>{{ movie }}</li></h3>
+                {% endfor %}
+            </ol>
+
+        </div>
+
+        <div class="column-2">
+            <h1>Everyone's Favorites:</h1>
+            <hr>
+            <ol type="1">
+                {% for movie in best %}
+                    <h3><li>{{ movie }}</li></h3>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+
+
+    <style>
+        h1 {
+            padding-top: 10px;
+            text-align: center;
+        }
+
+        ol {
+            padding-left: 50px;
+            text-align: left;
+        }
+
+        .parent {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .column-1 {
+            width: 50%;
+            height: 150vh;
+            background-color: green;
+            text-align: left;
+            color: white;
+        }
+
+        .column-2 {
+            width: 50%;
+            height: 150vh;
+            background-color: yellow;
+            text-align: left;
+            color: black;
+        }
+    </style>
 {% endblock %}
