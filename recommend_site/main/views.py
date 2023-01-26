@@ -57,7 +57,12 @@ def recommendations(response, answers, indices):
 
     # gets the movies with the highest recommendations
     best_movies = movies.get_favorites()
+    best_ids = movies.get_imdb_id(best_movies)
+    best = {id: movie for id, movie in zip(best_ids, best_movies)}
 
     # gets the personalized movies list
     personalized_movies = movies.get_personalized(answers, indices)
-    return render(response, "main/recommendations.html", {"best": best_movies, "personalized": personalized_movies})
+    personalized_ids = movies.get_imdb_id(personalized_movies)
+    personalized = {id: movie for id, movie in zip(personalized_ids, personalized_movies)}
+
+    return render(response, "main/recommendations.html", {"best": best, "personalized": personalized})

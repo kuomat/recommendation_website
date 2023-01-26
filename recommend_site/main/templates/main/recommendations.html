@@ -6,8 +6,10 @@
             <h1>Based on Your Ratings:</h1>
             <hr>
             <ol type="1">
-                {% for movie in personalized %}
-                    <h3><li>{{ movie }}</li></h3>
+                {% for id, movie in best.items %}
+                    <a href = "https://www.imdb.com/title/tt{{id}}" style="color: white">
+                        <h3><li>{{ movie }}</li></h3>
+                    </a>
                 {% endfor %}
             </ol>
 
@@ -17,8 +19,10 @@
             <h1>Everyone's Favorites:</h1>
             <hr>
             <ol type="1">
-                {% for movie in best %}
-                    <h3><li>{{ movie }}</li></h3>
+                {% for id, movie in personalized.items %}
+                    <a href = "https://www.imdb.com/title/{{id}}" style="color: black">
+                        <h3><li>{{ movie }}</li></h3>
+                    </a>
                 {% endfor %}
             </ol>
         </div>
@@ -34,6 +38,10 @@
         ol {
             padding-left: 50px;
             text-align: left;
+        }
+
+        a {
+            text-decoration: none;
         }
 
         .parent {

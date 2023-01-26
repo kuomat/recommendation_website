@@ -1,7 +1,9 @@
 import pandas as pd
 import numpy as np
 import random
+import requests
 from numpy.linalg import norm
+from imdb import IMDb
 
 
 TOP_FAVS = 15
@@ -141,3 +143,16 @@ def get_personalized(answers, indices):
     # gets the movies' names from the indices
     movie_names = [fix_movie(movies_df.loc[index, 'title']) for index in best_movies_indices]
     return movie_names
+
+# gets the imdb-id of the movies
+def get_imdb_id(movies):
+    res = []
+    imdb = IMDb()
+
+    for movie in movies:
+        movie_name = movie.split('(')[0]
+        results = imdb.search_movie(movie_name)
+        res.append(results[0].movieID)
+
+    return res
+
