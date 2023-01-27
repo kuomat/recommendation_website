@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import random
-import requests
 from numpy.linalg import norm
 from imdb import IMDb
 
@@ -18,7 +17,7 @@ def fix_movie(movie):
     l = movie.split(",")
     if len(l) == 1:
         return movie
-    if len(l) == 2:
+    elif len(l) == 2:
         return "The " + l[0] + " " + l[1][5:]
     else:
         return movie
@@ -50,7 +49,6 @@ def data_handling():
 
 
 id_to_title, movie_id_to_index, data_mat, num_movies = data_handling()
-watched = np.zeros(num_movies)
 
 # generate the questions to ask
 def generate_questions(num):
@@ -137,6 +135,10 @@ def get_personalized(answers, indices):
     # gets all the predicted values from the user's answers
     predictions = predict_movie(user_vector, watched)
 
+    # gives everyone's favorites if no ratings
+    if sum(watched) == 0:
+        return get_favorites()
+
     # gets the indices of the best personalized movie list
     best_movies_indices = np.argpartition(predictions, -TOP_FAVS)[-TOP_FAVS:]
 
@@ -149,6 +151,7 @@ def get_imdb_id(movies):
     res = []
     imdb = IMDb()
 
+    # search the imdb library
     for movie in movies:
         movie_name = movie.split('(')[0]
         results = imdb.search_movie(movie_name)
