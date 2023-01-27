@@ -5,7 +5,7 @@ from numpy.linalg import norm
 from imdb import IMDb
 
 
-TOP_FAVS = 15
+TOP_FAVS = 8
 TOP_USERS = 15
 
 
@@ -52,6 +52,7 @@ id_to_title, movie_id_to_index, data_mat, num_movies = data_handling()
 
 # generate the questions to ask
 def generate_questions(num):
+    # TODO: CHANGE THIS SO THAT IF IT GENREATES A QUESTION ALREADY WATCHED, WILL GENERATE AGAIN
     number_list = list(range(0, movies_df.shape[0]))
     indices = random.sample(number_list, num)
     movies = [fix_movie(movies_df.loc[index, 'title']) for index in indices]
@@ -109,9 +110,11 @@ def predict_movie(user_vector, watched):
 
 # converts the user's answers to a user vector
 def convert_ans_to_user_vector(answers, indices):
+    # TODO: CHANGE THIS SO THAT IT WILL REMEMBER WHAT HAPPENED BEFORE
     user_vector = np.zeros(num_movies)
 
     # an array to store if the user already watched certain movies
+    # TODO: CHANGE THIS SO THAT IT WILL REMEMBER WHAT HAPPENED BEFORE
     watched = np.zeros(num_movies)
 
     for i in range(len(indices)):

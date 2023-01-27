@@ -56,6 +56,7 @@ def recommendations(response, answers, indices):
     indices = indices.split(",")
 
     # gets the movies with the highest recommendations
+    # TODO: DO THIS ONLY ONCE
     best_movies = movies.get_favorites()
     best_ids = movies.get_imdb_id(best_movies)
     best = {id: movie for id, movie in zip(best_ids, best_movies)}
