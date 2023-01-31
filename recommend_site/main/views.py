@@ -30,18 +30,24 @@ def home(response):
 
     # if haven't rated movies before
     if not response.session['rated']:
-        if response.method == 'POST':
-            movie_nums = response.POST.get('movie_nums')
-            try:
-                int(movie_nums)
-                new_path = "/questions/" + movie_nums
-                return redirect(new_path)
-            except ValueError:
-                pass
-        return render(response, "main/home.html", {})
+        # go to select the number of ratings to give
+        return redirect(select_questions)
     else:
+        # show the recommendations
         return render(response, "main/recommendations.html", {"best": best, "personalized": response.session['personalized']})
 
+@login_required(login_url='/login/')
+def select_questions(response):
+    if response.method == 'POST':
+        movie_nums = response.POST.get('movie_nums')
+        try:
+            int(movie_nums)
+            new_path = "/questions/" + movie_nums
+            return redirect(new_path)
+        except ValueError:
+            pass
+
+    return render(response, "main/select_questions.html", {})
 
 # randomly chooses movies and put them into a questionaire
 @login_required(login_url='/login/')

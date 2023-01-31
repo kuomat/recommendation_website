@@ -1,78 +1,74 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-    <div class="parent">
-        <div class="column-1">
-            <h1>Based on Your Ratings:</h1>
-            <hr>
-            <ol type="1">
-                {% for id, movie in personalized.items %}
-                    <a href = "https://www.imdb.com/title/tt{{id}}" style="color: white">
-                        <h3><li>{{ movie }}</li></h3>
-                    </a>
-                {% endfor %}
-            </ol>
-            <div class="center_button">
-                <input type="submit" class="btn btn-primary" value="Search Name">
-            </div>
-        </div>
-
-        <div class="column-2">
-            <h1>Everyone's Favorites:</h1>
-            <hr>
-            <ol type="1">
-                {% for id, movie in best.items %}
-                    <a href = "https://www.imdb.com/title/tt{{id}}" style="color: black">
-                        <h3><li>{{ movie }}</li></h3>
-                    </a>
-                {% endfor %}
-            </ol>
-
-            <div class="center_button">
-                <a href="/home">
-                    <input type="submit" class="btn btn-primary" value="Randomly Rate">
+<div class="parent">
+    <div class="column-1">
+        <h1>Based on Your Ratings:</h1>
+        <hr>
+        <ol type="1">
+            {% for id, movie in personalized.items %}
+                <a href = "https://www.imdb.com/title/tt{{id}}" style="color: white">
+                    <h3><li>{{ movie }}</li></h3>
                 </a>
-            </div>
-        </div>
+            {% endfor %}
+        </ol>
     </div>
 
+    <div class="column-2">
+        <h1>Everyone's Favorites:</h1>
+        <hr>
+        <ol type="1">
+            {% for id, movie in best.items %}
+                <a href = "https://www.imdb.com/title/tt{{id}}" style="color: black">
+                    <h3><li>{{ movie }}</li></h3>
+                </a>
+            {% endfor %}
+        </ol>
+    </div>
+</div>
+<div class="center_button">
+    <a href="/select_questions">
+        <input type="submit" class="btn btn-primary" value="Rate More">
+    </a>
+</div>
 
-    <style>
-        h1 {
-            padding-top: 10px;
-            text-align: center;
-        }
 
-        ol {
-            padding-left: 50px;
-            text-align: left;
-        }
+<style>
+    h1 {
+        padding-top: 10px;
+        text-align: center;
+    }
 
-        a {
-            text-decoration: none;
-        }
+    ol {
+        padding-left: 50px;
+        text-align: left;
+    }
 
-        .parent {
-            display: flex;
-            flex-direction: row;
-        }
+    a {
+        text-decoration: none;
+    }
 
-        .column-1 {
-            width: 50%;
-            min-height: 100vh;
-            height: auto;
-            background-color: green;
-            text-align: left;
-            color: white;
-        }
+    .parent {
+        display: flex;
+        flex-direction: row;
+    }
 
-        .column-2 {
-            width: 50%;
-            min-height: 100vh;
-            height: auto;
-            background-color: yellow;
-            text-align: left;
-            color: black;
-        }
+    .column-1 {
+        width: 50%;
+        min-height: 100vh;
+        height: auto;
+        background-color: green;
+        text-align: left;
+        color: white;
+    }
+
+    .column-2 {
+        width: 50%;
+        min-height: 100vh;
+        height: auto;
+        background-color: yellow;
+        text-align: left;
+        color: black;
+    }
     </style>
 {% endblock %}
