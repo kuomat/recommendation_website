@@ -5,7 +5,7 @@ from numpy.linalg import norm
 from imdb import IMDb
 
 
-TOP_FAVS = 8
+TOP_FAVS = 10
 TOP_USERS = 15
 
 
