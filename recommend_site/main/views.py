@@ -5,47 +5,31 @@ from django.urls import reverse
 from .forms import RatingQuestionsForm
 from . import movies
 
-
 # gets the highest recommendations of all movies
 best_movies = movies.get_favorites()
 best_ids = movies.get_imdb_id(best_movies)
 best = {id: movie for id, movie in zip(best_ids, best_movies)}
 
-
-# gets the personalized movies list
-# personalized_movies = []
-# personalized_ids = []
-# personalized = None
-
 # redirects to the login page if not logged in
 @login_required(login_url='/login/')
 def home(response):
     # retreive previous variables from other sessions
-    global rated
-    if 'rated' in response.session:
-        rated = response.session['rated']
-    else:
-        rated = False
+    if 'rated' not in response.session:
+        response.session['rated'] = False
 
-    global personalized_movies, personalized_ids, personalized
-    if 'personalized_movies' in response.session:
-        personalized_movies = response.session['personalized_movies']
-    else:
-        personalized_movies = []
+    if 'personalized' not in response.session:
+        response.session['personalized'] = []
 
-    if 'personalized_ids' in response.session:
-        personalized_ids = response.session['personalized_ids']
-    else:
-        personalized_ids = []
+    if 'answers' not in response.session:
+        response.session['answers'] = []
 
-    if 'personalized' in response.session:
-        personalized = response.session['personalized']
-    else:
-        personalized = None
+    if 'indices' not in response.session:
+        response.session['indices'] = []
 
+    response.session.modified = True
 
     # if haven't rated movies before
-    if not rated:
+    if not response.session['rated']:
         if response.method == 'POST':
             movie_nums = response.POST.get('movie_nums')
             try:
@@ -56,7 +40,7 @@ def home(response):
                 pass
         return render(response, "main/home.html", {})
     else:
-        return render(response, "main/recommendations.html", {"best": best, "personalized": personalized})
+        return render(response, "main/recommendations.html", {"best": best, "personalized": response.session['personalized']})
 
 
 # randomly chooses movies and put them into a questionaire
@@ -76,6 +60,7 @@ def questions(response, ratings):
     if response.method == 'POST':
         response.session['rated'] = True
         response.session.modified = True
+
         form = RatingQuestionsForm(response.POST, questions=questions)
         if form.is_valid():
             for i in range(len(questions)):
@@ -99,21 +84,22 @@ def recommendations(response, answers, indices):
     answers = unquote_plus(answers).split(",")
     indices = unquote_plus(indices).split(",")
 
-    # gets the personalized movies list
-    global personalized_movies, personalized_ids, personalized
-    personalized_movies.extend(movies.get_personalized(answers, indices))
-    personalized_ids.extend(movies.get_imdb_id(personalized_movies))
-    personalized = {id: movie for id, movie in zip(personalized_ids, personalized_movies)}
+    response.session['answers'].extend(answers)
+    response.session['indices'].extend(indices)
 
-    response.session['personalized_movies'] = response.session['personalized_movies'].extend(movies.get_personalized(answers, indices))
-    response.session['personalized_ids'] = response.session['personalized_ids'].extend(movies.get_imdb_id(personalized_movies))
-    response.session['personalized'] = 
+    # gets the personalized movies list
+    personalized_movies = movies.get_personalized(response.session['answers'], response.session['indices'] )
+    personalized_ids = movies.get_imdb_id(personalized_movies)
+
+    response.session['personalized'] = {id: movie for id, movie in zip(personalized_ids, personalized_movies)}
     response.session.modified = True
 
-    return render(response, "main/recommendations.html", {"best": best, "personalized": personalized})
+    return render(response, "main/recommendations.html", {"best": best, "personalized": response.session['personalized']})
 
 def reset(response):
-    global rated
-    rated = False
-    print("Reset rated")
+    response.session['rated'] = False
+    response.session['answers'] = []
+    response.session['indices'] = []
+    response.session['personalized'] = []
+    response.session.modified = True
     return redirect("/home")
