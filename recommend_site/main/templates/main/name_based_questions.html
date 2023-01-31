@@ -1,0 +1,24 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {% for movie in searched_results %}
+        <div class="movies_form">
+            <h4>{{ field.label_tag }}</h4>
+            {{ field }}
+        </div>
+    {% endfor %}
+    <br>
+
+    <div class="center_button">
+        <a href="/home">
+            <input type="back" class="btn btn-primary" value="Previous Page">
+        </a>
+    </div>
+
+    <div class="center_button">
+        <input type="submit" class="btn btn-primary" value="Submit Ratings">
+    </div>
+</form>
+{% endblock %}

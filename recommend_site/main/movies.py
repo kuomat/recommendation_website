@@ -7,7 +7,7 @@ from imdb import IMDb
 
 TOP_FAVS = 10
 TOP_USERS = 15
-
+imdb = IMDb()
 
 movies_df = pd.read_csv("movies.csv")
 ratings_df = pd.read_csv("ratings.csv")
@@ -152,7 +152,6 @@ def get_personalized(answers, indices):
 # gets the imdb-id of the movies
 def get_imdb_id(movies):
     res = []
-    imdb = IMDb()
 
     # search the imdb library
     for movie in movies:
@@ -162,3 +161,12 @@ def get_imdb_id(movies):
 
     return res
 
+def search_movies(movie_name):
+    movies = imdb.search_movie(movie_name)[:3]
+    # indices = [get_movie_index(movie) for movie in movies]
+    # return movies, indices
+    return movies
+
+# def get_movie_index(movie):
+    # find the movie id
+    # use movie_id_to_index to get index

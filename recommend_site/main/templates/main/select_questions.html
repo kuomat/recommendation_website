@@ -4,11 +4,11 @@
     {% if user.is_authenticated %}
         <form autocomplete="OFF" method="POST">
             {% csrf_token %}
+            <!-- Random ratings -->
             <div class="ratings_form">
                 <h1><label for="movie_nums">Select the Number of Movies You Want to Give Ratings to:</label></h1>
                 <select class="movie_nums" name="movie_nums" id="movie_nums">
-                    <option value="ratings" selected>Number of Ratings</option>
-                    <option value="1">1</option>
+                    <option value="1" selected>1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
@@ -50,7 +50,14 @@
                     <option value="40">40</option>
                 </select>
 
-                <input type="submit" class="btn btn-primary" value="Submit">
+                <input type="submit" name="form1_submit" class="btn btn-primary" value="Submit">
+            </div>
+
+            <!-- Name-based rating -->
+            <div class="ratings_form">
+                <h1>Name-based Rating</h1>
+                <input type="text" id="movie_name" name="movie_name" placeholder="Enter the movie:">
+                <input type="submit" name="form2_submit" class="btn btn-primary" value="Submit">
             </div>
         </form>
     {% else %}

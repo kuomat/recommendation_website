@@ -39,20 +39,32 @@ def home(response):
 @login_required(login_url='/login/')
 def select_questions(response):
     if response.method == 'POST':
-        movie_nums = response.POST.get('movie_nums')
-        try:
-            int(movie_nums)
-            new_path = "/questions/" + movie_nums
-            return redirect(new_path)
-        except ValueError:
-            pass
+        if 'form1_submit' in response.POST:
+            movie_nums = response.POST.get('movie_nums')
+            movie_qs, indices = movies.generate_questions(int(movie_nums))
+
+            movie_qs = quote_plus(','.join(map(str, movie_qs)))
+            indices = quote_plus(','.join(map(str, indices)))
+
+            url = reverse("questions", kwargs={"movie_qs": movie_qs, "indices": indices})
+            return redirect(url)
+
+        if 'form2_submit' in response.POST:
+            movie_name = response.POST.get('movie_name')
+            movie_qs = movies.search_movies(movie_name)
+
+            # movie_qs = quote_plus(','.join(map(str, movie_qs)))
+            # indices =
+
+            # url = reverse("questions", kwargs={"movie_qs": movie_qs, "indices": indices})
 
     return render(response, "main/select_questions.html", {})
 
 # randomly chooses movies and put them into a questionaire
 @login_required(login_url='/login/')
-def questions(response, ratings):
-    movie_qs, indices = movies.generate_questions(ratings)
+def questions(response, movie_qs, indices):
+    movie_qs = unquote_plus(movie_qs).split(",")
+
     questions, answers = [], []
 
     for movie in movie_qs:
@@ -74,7 +86,6 @@ def questions(response, ratings):
 
             # converts array into a string to be passed into url
             answers = quote_plus(','.join(map(str, answers)))
-            indices = quote_plus(','.join(map(str, indices)))
 
             url = reverse("recommendations", kwargs={"answers": answers, "indices": indices})
             return redirect(url)
