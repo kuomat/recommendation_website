@@ -3,6 +3,7 @@ import numpy as np
 import random
 from numpy.linalg import norm
 from imdb import IMDb
+from fuzzywuzzy import process
 
 
 TOP_FAVS = 10
@@ -163,10 +164,21 @@ def get_imdb_id(movies):
 
 def search_movies(movie_name):
     movies = imdb.search_movie(movie_name)[:3]
-    # indices = [get_movie_index(movie) for movie in movies]
-    # return movies, indices
-    return movies
+    movie_titles = [movie['title'] for movie in movies]
 
-# def get_movie_index(movie):
-    # find the movie id
-    # use movie_id_to_index to get index
+    indices = [get_movie_index(movie_title) for movie_title in movie_titles]
+    return movies, indices
+
+def get_movie_index(movie_name):
+    movie_titles = movies_df['title'].tolist()
+
+    # remove all the years for better accuracy
+    processed_titles = [movie_title.split('(')[0].strip() for movie_title in movie_titles]
+
+    # find the closest match
+    match = process.extractOne(movie_name, processed_titles)
+
+    index = processed_titles.index(match[0])
+    movie_id = movies_df[movies_df['title'] == movie_titles[index]]['movieId'].iloc[0]
+
+    return movie_id_to_index[movie_id]

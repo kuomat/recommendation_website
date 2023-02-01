@@ -49,14 +49,19 @@ def select_questions(response):
             url = reverse("questions", kwargs={"movie_qs": movie_qs, "indices": indices})
             return redirect(url)
 
-        if 'form2_submit' in response.POST:
+        elif 'form2_submit' in response.POST:
             movie_name = response.POST.get('movie_name')
-            movie_qs = movies.search_movies(movie_name)
+            movie_qs, indices = movies.search_movies(movie_name)
 
-            # movie_qs = quote_plus(','.join(map(str, movie_qs)))
-            # indices =
+            print("movie name:", movie_name)
+            print("movie questions:", movie_qs)
+            print("movie indices:", indices)
 
-            # url = reverse("questions", kwargs={"movie_qs": movie_qs, "indices": indices})
+            movie_qs = quote_plus(','.join(map(str, movie_qs)))
+            indices = quote_plus(','.join(map(str, indices)))
+
+            url = reverse("questions", kwargs={"movie_qs": movie_qs, "indices": indices})
+            return redirect(url)
 
     return render(response, "main/select_questions.html", {})
 
